@@ -7,21 +7,14 @@ import lombok.Data;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
 
 @Data
 @Setter(AccessLevel.NONE)
 @Builder(toBuilder = true)
-public class PersonalEvent {
+public class Tag {
     @ApiModelProperty(readOnly = true)
     private String id;
 
     @NotNull
-    private LocalDateTime eventTime;
-
-    @ApiModelProperty(readOnly = true)
-    private LocalDateTime receivedTime;
-
-    @NotNull
-    private String description;
+    private String name;
 }
