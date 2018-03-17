@@ -1,6 +1,8 @@
 package net.dnjo.indexer.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.searchbox.client.JestClient;
@@ -8,6 +10,7 @@ import io.searchbox.core.Index;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import net.dnjo.indexer.configurations.ElasticsearchConfiguration;
+import net.dnjo.indexer.interfaces.HasId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +22,7 @@ import java.io.IOException;
 public class IndexClientService {
     private final ElasticsearchConfiguration elasticsearchConfiguration;
     private final JestClient jestClient;
-    private final ObjectMapper objectSerializer = new ObjectMapper()
-            .registerModule(new JavaTimeModule())
-            .setDateFormat(new StdDateFormat());
+    private final ObjectMapper objectSerializer;
 
     @AllArgsConstructor
     @Getter
@@ -38,10 +39,17 @@ public class IndexClientService {
     public IndexClientService(ElasticsearchConfiguration elasticsearchConfiguration, JestClient jestClient) {
         this.elasticsearchConfiguration = elasticsearchConfiguration;
         this.jestClient = jestClient;
+
+        val idFilter = SimpleBeanPropertyFilter.serializeAllExcept("id");
+        val filterProvider = new SimpleFilterProvider().addFilter("ignoreId", idFilter);
+        objectSerializer = new ObjectMapper()
+                .registerModule(new JavaTimeModule())
+                .setDateFormat(new StdDateFormat())
+                .setFilterProvider(filterProvider);
     }
 
     @SneakyThrows({ IOException.class })
-    public String indexObject(@NotNull Object object, @NotNull IndexDefinition indexDefinition) {
+    public String indexObject(@NotNull HasId object, @NotNull IndexDefinition indexDefinition) {
         val source = objectSerializer.writeValueAsString(object);
         log.debug("Indexing object '{}' in index {}", source, indexDefinition);
         val index = elasticsearchConfiguration.indexName(indexDefinition.getIndex());

@@ -5,14 +5,16 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Setter;
+import net.dnjo.indexer.interfaces.HasId;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Setter(AccessLevel.NONE)
 @Builder(toBuilder = true)
-public class PersonalEvent {
+public class PersonalEvent implements HasId {
     @ApiModelProperty(readOnly = true)
     private String id;
 
@@ -24,4 +26,6 @@ public class PersonalEvent {
 
     @NotNull
     private String description;
+
+    private List<String> tags;
 }
