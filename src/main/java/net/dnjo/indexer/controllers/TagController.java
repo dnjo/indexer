@@ -15,7 +15,7 @@ public class TagController {
         this.persisterService = persisterService;
     }
 
-    @RequestMapping(value = "", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
     public Tag createTag(@RequestBody Tag tag) {
         return persisterService.persistTag(tag);
     }
