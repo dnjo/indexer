@@ -38,6 +38,11 @@ public class PersisterService {
                 .updatedAt(now)
                 .build();
         val tagId = indexClientService.indexObject(newTag);
-        return tag.toBuilder().id(tagId).build();
+        return newTag.toBuilder().id(tagId).build();
+    }
+
+    public void updateTag(@NotNull String id, @NotNull Tag tag) {
+        val updatedTag = tag.toBuilder().updatedAt(LocalDateTime.now()).build();
+        indexClientService.updateObject(id, updatedTag);
     }
 }

@@ -3,10 +3,7 @@ package net.dnjo.indexer.controllers;
 import net.dnjo.indexer.models.Tag;
 import net.dnjo.indexer.services.PersisterService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/tags")
@@ -21,5 +18,10 @@ public class TagController {
     @RequestMapping(value = "", method = RequestMethod.POST)
     public Tag createTag(@RequestBody Tag tag) {
         return persisterService.persistTag(tag);
+    }
+
+    @RequestMapping(value = "{id}", method = RequestMethod.PUT)
+    public void updateTag(@PathVariable("id") String id, @RequestBody Tag tag) {
+        persisterService.updateTag(id, tag);
     }
 }
