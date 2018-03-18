@@ -7,11 +7,10 @@ import net.dnjo.indexer.services.IndexClientService;
 
 import java.time.LocalDateTime;
 
-@JsonFilter("ignoreId")
+@JsonFilter("indexedObject")
 public interface IndexedObject {
     String getId();
 
-    @JsonFilter("ignoreOnUpdate")
     @ApiModelProperty(readOnly = true)
     LocalDateTime getCreatedAt();
 

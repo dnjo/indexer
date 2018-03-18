@@ -26,6 +26,11 @@ public class PersisterService {
         return newEvent.toBuilder().id(eventId).build();
     }
 
+    public void updatePersonalEvent(@NotNull String id, @NotNull PersonalEvent personalEvent) {
+        val updatedEvent = personalEvent.toBuilder().updatedAt(LocalDateTime.now()).build();
+        indexClientService.updateObject(id, updatedEvent);
+    }
+
     public Tag persistTag(@NotNull Tag tag) {
         val now = LocalDateTime.now();
         val newTag = tag.toBuilder()
