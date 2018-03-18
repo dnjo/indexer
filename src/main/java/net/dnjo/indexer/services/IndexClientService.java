@@ -10,7 +10,7 @@ import io.searchbox.core.Index;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import net.dnjo.indexer.configurations.ElasticsearchConfiguration;
-import net.dnjo.indexer.interfaces.HasId;
+import net.dnjo.indexer.interfaces.IndexedObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,13 +49,13 @@ public class IndexClientService {
     }
 
     @SneakyThrows({ IOException.class })
-    public String indexObject(@NotNull HasId object, @NotNull IndexDefinition indexDefinition) {
+    public String indexObject(@NotNull IndexedObject object) {
         val source = objectSerializer.writeValueAsString(object);
-        log.debug("Indexing object '{}' in index {}", source, indexDefinition);
-        val index = elasticsearchConfiguration.indexName(indexDefinition.getIndex());
+        log.debug("Indexing object '{}' in index {}", source, object.getIndexDefinition());
+        val index = elasticsearchConfiguration.indexName(object.getIndexDefinition().getIndex());
         val indexAction = new Index.Builder(source)
                 .index(index)
-                .type(indexDefinition.getType())
+                .type(object.getIndexDefinition().getType())
                 .build();
         val result = jestClient.execute(indexAction);
         log.debug("Got index result '{}'", result.getJsonObject());

@@ -5,7 +5,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Setter;
-import net.dnjo.indexer.interfaces.HasId;
+import net.dnjo.indexer.interfaces.IndexedObject;
+import net.dnjo.indexer.services.IndexClientService;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ import java.util.List;
 @Data
 @Setter(AccessLevel.NONE)
 @Builder(toBuilder = true)
-public class PersonalEvent implements HasId {
+public class PersonalEvent implements IndexedObject {
     @ApiModelProperty(readOnly = true)
     private String id;
 
@@ -28,4 +29,9 @@ public class PersonalEvent implements HasId {
     private String description;
 
     private List<String> tags;
+
+    @Override
+    public IndexClientService.IndexDefinition getIndexDefinition() {
+        return IndexClientService.IndexDefinition.PERSONAL_EVENT;
+    }
 }

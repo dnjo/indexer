@@ -19,12 +19,12 @@ public class PersisterService {
     public PersonalEvent persistPersonalEvent(@NotNull PersonalEvent personalEvent) {
         val receivedTime = LocalDateTime.now();
         val event = personalEvent.toBuilder().receivedTime(receivedTime).build();
-        val eventId = indexClientService.indexObject(event, IndexClientService.IndexDefinition.PERSONAL_EVENT);
+        val eventId = indexClientService.indexObject(event);
         return event.toBuilder().id(eventId).build();
     }
 
     public Tag persistTag(@NotNull Tag tag) {
-        val tagId = indexClientService.indexObject(tag, IndexClientService.IndexDefinition.TAG);
+        val tagId = indexClientService.indexObject(tag);
         return tag.toBuilder().id(tagId).build();
     }
 }
