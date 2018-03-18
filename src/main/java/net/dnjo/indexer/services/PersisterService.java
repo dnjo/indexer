@@ -17,14 +17,22 @@ public class PersisterService {
     }
 
     public PersonalEvent persistPersonalEvent(@NotNull PersonalEvent personalEvent) {
-        val receivedTime = LocalDateTime.now();
-        val event = personalEvent.toBuilder().receivedTime(receivedTime).build();
-        val eventId = indexClientService.indexObject(event);
-        return event.toBuilder().id(eventId).build();
+        val now = LocalDateTime.now();
+        val newEvent = personalEvent.toBuilder()
+                .createdAt(now)
+                .updatedAt(now)
+                .build();
+        val eventId = indexClientService.indexObject(newEvent);
+        return newEvent.toBuilder().id(eventId).build();
     }
 
     public Tag persistTag(@NotNull Tag tag) {
-        val tagId = indexClientService.indexObject(tag);
+        val now = LocalDateTime.now();
+        val newTag = tag.toBuilder()
+                .createdAt(now)
+                .updatedAt(now)
+                .build();
+        val tagId = indexClientService.indexObject(newTag);
         return tag.toBuilder().id(tagId).build();
     }
 }

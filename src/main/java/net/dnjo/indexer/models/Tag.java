@@ -9,6 +9,7 @@ import net.dnjo.indexer.interfaces.IndexedObject;
 import net.dnjo.indexer.services.IndexClientService;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @Data
 @Setter(AccessLevel.NONE)
@@ -16,6 +17,10 @@ import javax.validation.constraints.NotNull;
 public class Tag implements IndexedObject {
     @ApiModelProperty(readOnly = true)
     private String id;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
     @NotNull
     private String name;

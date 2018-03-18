@@ -22,8 +22,9 @@ public class PersonalEvent implements IndexedObject {
     @NotNull
     private LocalDateTime eventTime;
 
-    @ApiModelProperty(readOnly = true)
-    private LocalDateTime receivedTime;
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
 
     @NotNull
     private String description;
