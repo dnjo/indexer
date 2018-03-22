@@ -8,10 +8,13 @@ import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Index;
+import io.searchbox.core.Search;
+import io.searchbox.core.SearchResult;
 import io.searchbox.core.Update;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import net.dnjo.indexer.configurations.ElasticsearchConfiguration;
+import net.dnjo.indexer.enums.QueryObjectType;
 import net.dnjo.indexer.interfaces.IndexedObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -84,5 +87,14 @@ public class IndexClientService {
                 .build();
         val result = jestClient.execute(updateAction);
         log.debug("Got update result '{}'", result.getJsonObject());
+    }
+
+    @SneakyThrows({ IOException.class })
+    public SearchResult query(@NotNull String query, @NotNull QueryObjectType queryObjectType) {
+        val index = elasticsearchConfiguration.indexName(queryObjectType.getIndexDefinition().getIndex());
+        val search = new Search.Builder(query)
+                .addIndex(index)
+                .build();
+        return jestClient.execute(search);
     }
 }
